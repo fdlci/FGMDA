@@ -1,6 +1,10 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from scipy.spatial.distance import cdist
 from typing import Tuple
+
+colors = [name for name, color in mcolors.TABLEAU_COLORS.items()]
 
 
 class MetricTree:
@@ -118,3 +122,25 @@ class MetricTree:
         if points_right is not None:
             self.right = MetricTree().build(points_right)
         return self
+
+    def plot(self, color=None, fig=None, ax=None):
+        if color is None:
+            color = np.random.choice(colors)
+        if fig is None:
+            fig, ax = plt.subplots()
+
+        ax.scatter(self.root[0], self.root[1], color=color)
+        if self.left is not None:
+            ax.plot(
+                [self.root[0], self.left.root[0]],
+                [self.root[1], self.left.root[1]],
+                color=color,
+            )
+            self.left.plot(color, fig, ax)
+        if self.right is not None:
+            ax.plot(
+                [self.root[0], self.right.root[0]],
+                [self.root[1], self.right.root[1]],
+                color=color,
+            )
+            self.right.plot(color, fig, ax)
