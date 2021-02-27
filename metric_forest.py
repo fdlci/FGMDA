@@ -19,6 +19,7 @@ class MetricForestTree:
         self.min_right = None
         self.max_right = None
         self.size = None
+        self.dim = None
         if points is not None:
             self.build(points)
 
@@ -53,7 +54,7 @@ class MetricForestTree:
                 dist_to_pivot,
                 None,
                 None,
-                np.empty(shape=(0, 2)),
+                np.empty(shape=(0, self.dim)),
             )
         N = len(points)
         idx_left = int(N * self.m_proportion)
@@ -84,11 +85,12 @@ class MetricForestTree:
 
     def build(self, points: np.ndarray, subset_size: int = 10000):
         self.size = len(points)
+        self.dim = points.shape[1]
         if len(points) == 0:
-            return None, np.empty(shape=(0, 2))
+            return None, np.empty(shape=(0, self.dim))
         if len(points) == 1:
             self.root = points[0]
-            return self, np.empty(shape=(0, 2))
+            return self, np.empty(shape=(0, self.dim))
         ## Selection of the pivot
         pivot_idx = self.pivot_choice(points)
         remaining_points = np.delete(points, pivot_idx, 0)
@@ -114,8 +116,8 @@ class MetricForestTree:
         ) = self.left_middle_right_split(remaining_points, distances)
 
         ## Build the left and right trees if needed
-        discarded_left = np.empty(shape=(0, 2))
-        discarded_right = np.empty(shape=(0, 2))
+        discarded_left = np.empty(shape=(0, self.dim))
+        discarded_right = np.empty(shape=(0, self.dim))
         if points_left is not None:
             self.left, discarded_left = MetricForestTree(self.m_proportion).build(
                 points_left
