@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from scipy.spatial.distance import cdist
 from typing import Tuple
+from mpl_toolkits.mplot3d import Axes3D
 
 colors = [name for name, color in mcolors.TABLEAU_COLORS.items()]
 
@@ -133,23 +134,46 @@ class MetricForestTree:
         if color is None:
             color = np.random.choice(colors)
         if fig is None:
-            fig, ax = plt.subplots()
-
-        ax.scatter(self.root[0], self.root[1], color=color)
-        if self.left is not None:
-            ax.plot(
-                [self.root[0], self.left.root[0]],
-                [self.root[1], self.left.root[1]],
-                color=color,
-            )
-            self.left.plot(color, fig, ax)
-        if self.right is not None:
-            ax.plot(
-                [self.root[0], self.right.root[0]],
-                [self.root[1], self.right.root[1]],
-                color=color,
-            )
-            self.right.plot(color, fig, ax)
+            # print(self.root.shape)
+            if self.root.shape[0] == 2:
+                fig, ax = plt.subplots()
+            elif self.root.shape[0] == 3:
+                fig = plt.figure()
+                ax = fig.add_subplot(projection='3d')
+        if self.root.shape[0] == 2:
+            ax.scatter(self.root[0], self.root[1], color=color)
+            if self.left is not None:
+                ax.plot(
+                    [self.root[0], self.left.root[0]],
+                    [self.root[1], self.left.root[1]],
+                    color=color,
+                )
+                self.left.plot(color, fig, ax)
+            if self.right is not None:
+                ax.plot(
+                    [self.root[0], self.right.root[0]],
+                    [self.root[1], self.right.root[1]],
+                    color=color,
+                )
+                self.right.plot(color, fig, ax)
+        elif self.root.shape[0] == 3:
+            ax.scatter(self.root[0], self.root[1], self.root[2], color=color)
+            if self.left is not None:
+                ax.plot(
+                    [self.root[0], self.left.root[0]],
+                    [self.root[1], self.left.root[1]],
+                    [self.root[2], self.left.root[2]],
+                    color=color,
+                )
+                self.left.plot(color, fig, ax)
+            if self.right is not None:
+                ax.plot(
+                    [self.root[0], self.right.root[0]],
+                    [self.root[1], self.right.root[1]],
+                    [self.root[2], self.right.root[2]],
+                    color=color,
+                )
+                self.right.plot(color, fig, ax)           
 
 
 class MetricForest:
@@ -167,7 +191,19 @@ class MetricForest:
         self.forest.append(tree)
         self.build_forest(points)
 
-    def plot(self):
-        fig, ax = plt.subplots()
+    def plot(self, points: np.ndarray):
+        if points.shape[1] == 2:
+            fig, ax = plt.subplots()
+        elif points.shape[1] == 3:
+            fig = plt.figure()
+            ax = fig.add_subplot(projection='3d')
         for tree in self.forest:
             tree.plot(fig=fig, ax=ax)
+        plt.title('Plotting the Metric Forest')
+
+# if __name__=='__main__':
+#     n_points, dim, n = 1000, 3, 10
+#     points = n*np.random.random((n_points, dim))
+#     forest = MetricForest(0.5, points)
+#     forest.plot(points)
+#     plt.show()
