@@ -23,7 +23,10 @@ def defeatist_search_vn(
     else:
 
         current_dist = euclidean(query_point, metric_tree.root)
-        mu = metric_tree.mu
+        if (metric_tree.max_left is not None) and (metric_tree.min_right is not None):
+            mu = (metric_tree.max_left + metric_tree.min_right)/2
+        else:
+            mu = metric_tree.max_left
 
         if current_dist < min_dist:
             min_dist = current_dist
@@ -87,4 +90,32 @@ def search_pruning_vn(
             )
 
         return result, min_dist, visited_nodes
+
+def search_pruning_in_forest_vn(metric_forest, q):
+    nn = []
+    distances = []
+    visited_nodes = 0
+    for i, tree in enumerate(metric_forest.forest):
+        result, min_dist, vn = search_pruning_vn(tree, q)
+        nn.append(result)
+        distances.append(min_dist)
+        visited_nodes += vn
+    sorted_indices = np.argsort(distances)
+    distances = np.array(distances)[sorted_indices]
+    nn = np.array(nn)[sorted_indices]
+    return nn[0], distances[0], visited_nodes
+
+def search_defeatist_in_forest_vn(metric_forest, q):
+    nn = []
+    distances = []
+    visited_nodes = 0
+    for i, tree in enumerate(metric_forest.forest):
+        result, min_dist, vn = defeatist_search_vn(tree, q)
+        nn.append(result)
+        distances.append(min_dist)
+        visited_nodes += vn
+    sorted_indices = np.argsort(distances)
+    distances = np.array(distances)[sorted_indices]
+    nn = np.array(nn)[sorted_indices]
+    return nn[0], distances[0], visited_nodes
 

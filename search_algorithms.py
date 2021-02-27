@@ -76,7 +76,10 @@ def defeatist_search(
     else:
 
         current_dist = euclidean(query_point, metric_tree.root)
-        mu = metric_tree.mu
+        if (metric_tree.max_left is not None) and (metric_tree.min_right is not None):
+            mu = (metric_tree.max_left + metric_tree.min_right)/2
+        else:
+            mu = metric_tree.max_left
 
         if current_dist < min_dist:
             min_dist = current_dist
@@ -91,14 +94,28 @@ def defeatist_search(
         return result, min_dist
 
 
-# def compare_search_algorithms(all_points, metric_tree, q):
+def search_pruning_in_forest(metric_forest, q):
+    nn = []
+    distances = []
+    for i, tree in enumerate(metric_forest.forest):
+        result, min_dist = search_pruning(tree, q)
+        nn.append(result)
+        distances.append(min_dist)
+    sorted_indices = np.argsort(distances)
+    distances = np.array(distances)[sorted_indices]
+    nn = np.array(nn)[sorted_indices]
+    return nn[0], distances[0]
 
-#     nn_exact, visit_exact = exact_nn_search(all_points, q)
-#     nn_pruning, visit_pruning = search_pruning(metric_tree, q)
-#     nn_defeat, visit_defeat = defeatist_search(metric_tree, q)
+def search_defeatist_in_forest(metric_forest, q):
+    nn = []
+    distances = []
+    for i, tree in enumerate(metric_forest.forest):
+        result, min_dist = defeatist_search(tree, q)
+        nn.append(result)
+        distances.append(min_dist)
+    sorted_indices = np.argsort(distances)
+    distances = np.array(distances)[sorted_indices]
+    nn = np.array(nn)[sorted_indices]
+    return nn[0], distances[0]
 
-#     return """Exact search: NN {} visited_nodes: {}
-# Exact search with pruning: NN {} visited_nodes: {}
-# Defeatist search : NN {} visited_nodes: {}""".format(
-#         nn_exact, visit_exact, nn_pruning, visit_pruning, nn_defeat, visit_defeat
-#     )
+
