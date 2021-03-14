@@ -5,6 +5,16 @@ import math
 import matplotlib.pyplot as plt
 from metric_tree import MetricTree
 
+def exact_nn_search(all_points, q):
+    nnq = None
+    d = math.inf
+    for point in all_points:
+        dist = euclidean(point, q)
+        if dist < d:
+            d = dist
+            nnq = point
+    return nnq, len(all_points)
+
 def defeatist_search_vn(
     metric_tree: MetricTree,
     query_point: np.ndarray,
