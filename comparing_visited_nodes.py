@@ -10,17 +10,13 @@ from experiments import *
 """In this file you can find the functions used for solving Question 5
 in the notebook Project"""
 
-def comparing_visited_nodes(data_size, N, gaussian=False):
+def comparing_visited_nodes(data_size, N):
     """Compares the average number of visited nodes for both pivot choice
-    methods while varying the size of the dataset. If isgaussian is set to False,
-    then the points are drawn randomly, otherwise the points are drawn from gaussians"""
+    methods while varying the size of the dataset."""
     mean_vns = []
     mean_vns_bis = []
     for i in tqdm(data_size):
-        if gaussian:
-            points = data_drawn_from_gaussians(i, N, 10, int(i/10))
-        else:
-            points = np.random.rand(i, N)
+        points = np.random.rand(i, N)
         tree = MetricTree(points)
         tree_bis = MetricTreepivot(points)
         n_try = 1000
@@ -38,16 +34,11 @@ def comparing_visited_nodes(data_size, N, gaussian=False):
 
 def increasing_dimension(dims, gaussian=False, size=10000):
     """Compares the average number of visited nodes for both pivot choice
-    methods while varying the dimension of the Euclidean space. If isgaussian 
-    is set to False, then the points are drawn randomly, otherwise the points 
-    are drawn from gaussians"""
+    methods while varying the dimension of the Euclidean space."""
     mean_vns = []
     mean_vns_bis = []
     for i in tqdm(dims):
-        if gaussian:
-            points = data_drawn_from_gaussians(size, i, 10, int(size/10))
-        else:
-            points = np.random.rand(size, i)
+        points = np.random.rand(size, i)
         tree = MetricTree(points)
         tree_bis = MetricTreepivot(points)
         n_try = 1000
