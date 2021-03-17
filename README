@@ -1,0 +1,20 @@
+Foundations of Geometric Methods in Data Analysis Search algorithms in metric trees
+
+Here are the different files you can find in this repository:
+
+ALL OUR RESULTS ARE SHOWN IN THE FOLLOWING TWO NOTEBOOKS
+
+NOTEBOOKS:
+- Project.ipynb: contains our results for questions: 1, 2, 3, and 5
+- 4. Image retrieval.ipynb: contains our results for question 4
+
+PYTHON FILES
+
+- metric_tree.py: implementation of the metric tree class with random choice of the pivot (Question 1)
+- search_alg_visited_nodes.py: implementation of the exact pruning and defeatist search with visited number
+of nodes (Question 1) 
+- metric_forest.py: implementation of the metric forest class (Question 2)
+- experiments.py: all the functions needed to perform the experiments described in Question 3: comparison
+of the average number of visited nodes (Question 3)
+- metric_tree_pivot.py: implementation of the metric tree class with an optimized choice for the pivot (Question 5)
+- comparing_visited_nodes.py: contains all functions needed to compare both pivot choice methods
