@@ -1,4 +1,4 @@
-Foundations of Geometric Methods in Data Analysis Search algorithms in metric trees
+FOUNDATIONS OF GEOMETRIC METHODS IN DATA ANALYSIS SEARCH ALGORITHMS IN METRIC TREES
 
 Here are the different files you can find in this repository:
 
@@ -8,7 +8,7 @@ NOTEBOOKS:
 - Project.ipynb: contains our results for questions: 1, 2, 3, and 5
 - 4. Image retrieval.ipynb: contains our results for question 4
 
-PYTHON FILES
+PYTHON FILES:
 
 - metric_tree.py: implementation of the metric tree class with random choice of the pivot (Question 1)
 - search_alg_visited_nodes.py: implementation of the exact pruning and defeatist search with visited number
